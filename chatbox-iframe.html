@@ -18,39 +18,6 @@
 <link rel="stylesheet" type="text/css" href="style.css" />
 
 <script type="text/javascript">
-	  function ajaxRequest(actionName,option){
-		var optionsLocal = {"showSpinner":option};
-		$.ajax({
-		url: actionName,
-		type: "POST",
-		cache: false,
-		data:"",
-		dataType:"html",
-		context: document.body,
-		success: function(data)
-		{
-		$('#pagewrap').html(data);
-		},
-		beforeSend:function (){
-		  if(optionsLocal.showSpinner==true){
-		$('#ajaxImage').show();
-		$('#ajaxBackground').show();
-		  }
-		},
-		complete:function (){
-		  if(optionsLocal.showSpinner==true){
-		$('#ajaxImage').hide();
-		$('#ajaxBackground').hide();
-		  }
-		},
-		error: function(){
-		  //Hide the spinner div
-		  $('#ajaxImage').hide();
-		  $('#ajaxBackground').hide();
-		  }
-		 });
-	  };
-
 	  $(document).ready(function() {               
 			$("a[class='iframe']").fancybox({
 				'width'             : '75%',
