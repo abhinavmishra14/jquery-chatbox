@@ -20,64 +20,50 @@
             width: 300, // width of the chatbox
             messageSent: function(id, user, msg) {
                 // override this
-                this.boxManager.addMsg(user.first_name, msg);
+                this.boxManager.addMsg(id, user, msg);
             },
             boxClosed: function(id) {
 				$(".ui-chatbox-log").html("");
+				id.show(); //show the chat link
 				//TODO:: Call service to clear session
             }, // called when the close icon is clicked
             boxManager: {
                 init: function(elem) {
                     this.elem = elem;
                 },
-                addMsg: function(peer, msg) {
+                addMsg: function(id, user, msg) {
                     var self = this;
                     var box = self.elem.uiChatboxLog;
                     var e = document.createElement('div');
                     box.append(e);
                     $(e).hide();
 
-					// USER INPUT [Start]
-                    var systemMessage = false;
-                    if (peer) {
-                        var peerName = document.createElement("b");
-                        $(peerName).text(peer + ": ");
-                        e.appendChild(peerName);
-                    } else {
-                        systemMessage = true;
-                    }
-
-                    var msgElement = document.createElement(
-                        systemMessage ? "i" : "span");
-                    $(msgElement).text(msg);
+					//###################### USER INPUT [Start] #################
+                    var msgElement = document.createElement("span");
+                    $(msgElement).text("\n"+user.name + ": "+msg);
                     e.appendChild(msgElement);
                     $(e).addClass("ui-chatbox-msg");
                     $(e).css("maxWidth", $(box).width());
                     $(e).fadeIn();
 					self._scrollToBottom();
-					//USER INPUT [End]
-					
-					if (msg.toLowerCase().indexOf("hi")> -1) {
-						botResponse(e, self, box, "Hello there!");
-					} else if (msg.toLowerCase().indexOf("how are you")> -1) {
-						var decider = getRandom(1,2);
-						if (decider == 1) {
-							botResponse(e, self, box, "I'm doing well, thanks");
-						} else if (decider == 2) {
-							botResponse(e, self, box, "Not too bad");
-						}
-					} else {
-						var decider = getRandom(1,4);
-						if (decider == 1) {
-							botResponse(e, self, box, "I didn't get that");
-						} else if (decider == 2) {
-							botResponse(e, self, box, "Please rephrase that");
-						} else if (decider == 3) {
-							botResponse(e, self, box, "I am not sure.");
-						} else if (decider == 4) {
-							botResponse(e, self, box, "I am sorry");
-						}
-					}
+					//####################### USER INPUT [End] ###################
+										
+					//####################### SERVER COMMUNICATION [Start] ###################
+					var requestObject = new Object();
+					requestObject.userName=user.name;
+					requestObject.chat=box.text();
+					requestObject.userText=msg;
+
+					var requestUrl = properties.serverUrl+properties.actionName;
+					ajaxRequest(requestUrl, requestObject,
+							renderChat, {
+								"showSpinner" : false,
+								"e":e,
+								"self":self
+							})
+				   	
+					//####################### SERVER COMMUNICATION [End] ###################
+
                     if (!self.elem.uiChatboxTitlebar.hasClass("ui-state-focus")
                         && !self.highlightLock) {
                         self.highlightLock = true;
@@ -198,7 +184,7 @@
                     // anything?
                 })
                 .appendTo(uiChatboxContent),
-            uiChatboxInputBox = (self.uiChatboxInputBox = $('<textarea></textarea>'))
+            uiChatboxInputBox = (self.uiChatboxInputBox = $('<textarea autofocus></textarea>'))
                 .addClass('ui-widget-content ' +
                           'ui-chatbox-input-box ' +
                           'ui-corner-all'
@@ -272,29 +258,24 @@
         }
     });
 }(jQuery));
-
+ 
 /**
- * Gets a random number between max and min
+ * Renders the chat response
+ * 
+ * @param data
+ * @param options
  */
-function getRandom(min, max) {
-   return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-/**
- * Prints bot response
- */
-function botResponse (e, self, box, response) {
-	var botMsgBreak = document.createElement("br");
-	e.appendChild(botMsgBreak);	
-						
-	var bot = document.createElement("b");
-	$(bot).text("Abhinav: ");
-	e.appendChild(bot);
+function renderChat(data,options) {
+	console.log(data); //Log response.
+	var userTxt = data.userText;
+	var botMessage = data.botMessage;
+	var e = options.e;
+	var self = options.self;
+	
 	var botMsgElement = document.createElement("span");
-	$(botMsgElement).text(response);
+
+	$(botMsgElement).text("\n"+botMessage);
 	e.appendChild(botMsgElement);
-	$(e).addClass("ui-chatbox-msg");
-	$(e).css("maxWidth", $(box).width());
-	$(e).fadeIn();
+
 	self._scrollToBottom();
 }

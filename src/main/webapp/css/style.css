@@ -19,10 +19,10 @@
 	margin-left: -24px;
 }
 
-#pagewrap {
-    min-width: 965px;
-    margin-left:auto;
-    margin-right:auto;
-    width:978px;
-    margin:20px auto 0px;
+#clickToChat {
+    position:fixed;
+    bottom:20px;
+    right:0px;
+    height:115px;
+    width:165px; 
 }

@@ -5,17 +5,17 @@
 <title>Chatbox iFrame</title>
 <!-- Put All Javascripts & css files in database and access them using webdav -->
 <script type="text/javascript"
-	src="jquery.fancybox-1.3.4/jquery-1.4.3.min.js"></script>
+	src="js/jquery.fancybox-1.3.4/jquery-1.4.3.min.js"></script>
 <!-- jQuery Fancybox -->
 <script type="text/javascript"
-	src="jquery.fancybox-1.3.4/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
+	src="js/jquery.fancybox-1.3.4/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
 <script type="text/javascript"
-	src="jquery.fancybox-1.3.4/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+	src="js/jquery.fancybox-1.3.4/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
 <link rel="stylesheet" type="text/css"
-	href="jquery.fancybox-1.3.4/fancybox/jquery.fancybox-1.3.4.css"
+	href="js/jquery.fancybox-1.3.4/fancybox/jquery.fancybox-1.3.4.css"
 	media="screen" />
 
-<link rel="stylesheet" type="text/css" href="style.css" />
+<link rel="stylesheet" type="text/css" href="css/style.css" />
 
 <script type="text/javascript">
 	  $(document).ready(function() {               
@@ -31,14 +31,18 @@
 				'onComplete': function(){
 					var action="http://localhost:8080/chatbot-webapp/welcome?userName="+$("#txtHiddenName").val();
 					$("#fancybox-frame").attr("src", action);
-				   }          				
-				});                   
+				 },   
+				 'onClosed'  : function() { 
+					//TODO:: Call service to clear session if required.
+			     }
+			  });                   
 		});
 	   </script>
 </head>
 <body>
 	<input type="hidden" id="txtHiddenName" value="Abhinav" />
-	<!-- This fild will be set by consumer application via session variable -->
-	<a id="iframeLink" href="" onclick="chatbox-iframe.html?userName" class='iframe'>Click here to Chat</a>
+	<!-- This field will be set by consumer application via session variable -->
+	<a id="iframeLink" href="javascript:void(0);"
+		onclick="chatbox-iframe.html?userName" class='iframe'>Click here to Chat</a>
 </body>
 </html>
