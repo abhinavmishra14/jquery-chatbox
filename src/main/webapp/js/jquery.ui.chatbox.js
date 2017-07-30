@@ -267,15 +267,22 @@
  */
 function renderChat(data,options) {
 	console.log(data); //Log response.
-	var userTxt = data.userText;
-	var botMessage = data.botMessage;
 	var e = options.e;
 	var self = options.self;
 	
-	var botMsgElement = document.createElement("span");
-
-	$(botMsgElement).text("\n"+botMessage);
-	e.appendChild(botMsgElement);
+	if(data!=null) {
+		var userTxt = data.userText;
+		var botMessage = data.botMessage;		
+		var botMsgElement = document.createElement("span");
+	
+		$(botMsgElement).text("\n"+botMessage);
+		e.appendChild(botMsgElement);	
+	} else {
+		var botMsgElement = document.createElement("span");
+		botMsgElement.setAttribute("style","color:red")
+		$(botMsgElement).text("\nUnknown error");
+		e.appendChild(botMsgElement);	
+	}
 
 	self._scrollToBottom();
 }
