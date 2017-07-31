@@ -25,7 +25,12 @@
             boxClosed: function(id) {
 				$(".ui-chatbox-log").html("");
 				id.show(); //show the chat link
-				//TODO:: Call service to clear session
+				console.log("Closing session..");
+				//Call service to clear session from server
+				var action = properties.serverUrl+ properties.chatBotInteractionExitAction;			
+				$.get(action, function(data, status){
+				    alert("Sesson close: " + status);
+				});
             }, // called when the close icon is clicked
             boxManager: {
                 init: function(elem) {
@@ -54,7 +59,7 @@
 					requestObject.chat=box.text();
 					requestObject.userText=msg;
 
-					var requestUrl = properties.serverUrl+properties.actionName;
+					var requestUrl = properties.serverUrl+properties.chatBotInteractionAction;
 					ajaxRequest(requestUrl, requestObject,
 							renderChat, {
 								"showSpinner" : false,

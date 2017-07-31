@@ -1,4 +1,5 @@
 properties = {
-	serverUrl:'http://localhost:8080/chatbot-webapp/',
-	actionName:'chatBotInteraction'
+		serverUrl:'http://localhost:8080/chatbot-webapp/',
+		chatBotInteractionAction:'chatBotInteraction',
+		chatBotInteractionExitAction:"chatBotInteractionExit"
 }
